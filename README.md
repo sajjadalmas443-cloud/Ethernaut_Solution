@@ -24,3 +24,10 @@ The target contract checks the user's balance but updates its state *after* tran
 
 ### Analysis
 The contract trusts an external interface implementation without verifying the calling contract's behavior. By implementing a malicious `isLastFloor()` function that returns `false` on the first internal call (to bypass the `if` check) and `true` on the second call, we manipulate the state to reach the top floor successfully.
+---
+
+## 4. Privacy Solution
+**Vulnerability Type:** Information Disclosure & Storage Layout Reading
+
+### Analysis
+State variables marked as `private` in Solidity are only restricted from being accessed by other smart contracts, but their data is fully visible on the public blockchain. By analyzing the contract's storage layout (taking variable packaging into account) and reading the storage slot `5` off-chain, we extract the 32-byte key, cast it to `bytes16`, and call `unlock()` to solve the level.
